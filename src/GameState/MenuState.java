@@ -76,7 +76,7 @@ public class MenuState extends GameState
 		// Start was selected
 		if(0 == currentChoice)
 		{
-			// Start the game...
+			gsmanager.setState(GameStateManager.STAGE1STATE);
 		}
 		// Help was selected
 		else if( 1 == currentChoice)
