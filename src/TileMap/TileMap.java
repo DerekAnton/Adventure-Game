@@ -101,6 +101,7 @@ public class TileMap
 		}
 	}
 	
+	// Getters 
 	public int getTileSize() { return tileSize; }
 	public int getx() { return (int)Math.round(x); }
 	public int gety() { return (int)Math.round(y);}

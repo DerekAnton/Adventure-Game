@@ -36,6 +36,6 @@ public class GameStateManager
 	}
 	public void keyReleased(int k)
 	{
-		gameStates.get(currentState).inkeyReleased(k);
+		gameStates.get(currentState).keyReleased(k);
 	}
 }

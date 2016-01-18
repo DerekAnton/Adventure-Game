@@ -110,7 +110,7 @@ public class MenuState extends GameState
 	}
 
 	@Override
-	public void inkeyReleased(int k)
+	public void keyReleased(int k)
 	{
 		// Blank
 	}

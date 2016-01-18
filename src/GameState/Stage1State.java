@@ -20,7 +20,7 @@ public class Stage1State extends GameState
 	public void init() 
 	{
 		tileMap = new TileMap(30);
-		tileMap.loadTiles("/Tileset/grasstileset.gif");
+		tileMap.loadTiles("/Tileset/maplesheet.png");
 		tileMap.loadMap("/MapFiles/level1-1.map");
 		tileMap.setPosition(0, 0);
 	}
@@ -48,7 +48,7 @@ public class Stage1State extends GameState
 	}
 
 	@Override
-	public void inkeyReleased(int k) 
+	public void keyReleased(int k) 
 	{
 		
 	}
