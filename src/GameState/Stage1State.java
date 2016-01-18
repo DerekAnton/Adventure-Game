@@ -9,6 +9,7 @@ import Main.GamePanel;
 public class Stage1State extends GameState
 {
 	private TileMap tileMap;
+	private Background background;
 	
 	public Stage1State(GameStateManager gsmanager)
 	{
@@ -23,6 +24,7 @@ public class Stage1State extends GameState
 		tileMap.loadTiles("/Tileset/maplesheet.png");
 		tileMap.loadMap("/MapFiles/level1-1.map");
 		tileMap.setPosition(0, 0);
+		background = new Background("/Backgrounds/grassbg1.gif", 0.1);
 	}
 
 	@Override
@@ -34,9 +36,8 @@ public class Stage1State extends GameState
 	@Override
 	public void draw(Graphics2D g) 
 	{
-		// Clear the Screen
-		g.setColor(Color.WHITE);
-		g.fillRect(0, 0, GamePanel.WIDTH, GamePanel.HEIGHT);
+		// Draw background
+		background.draw(g);
 		// Draw the tile map
 		tileMap.draw(g);
 	}
