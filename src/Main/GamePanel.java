@@ -73,10 +73,11 @@ public class GamePanel extends JPanel implements Runnable,  KeyListener
 			
 			// Target time is in milliseconds, elapsed time is in nanoseconds, so we must divide by 1 million to keep them common
 			wait = targetTime - elapsed / 1000000;
-			
+			if(wait < 0)
+				wait = 1;
 			try
 			{
-				Thread.sleep(Math.abs(wait));
+				Thread.sleep(wait);
 			}
 			catch(Exception e)
 			{

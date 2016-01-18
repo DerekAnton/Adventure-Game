@@ -163,7 +163,7 @@ public abstract class MapObject
 				// Undo the move and set our y velocity to 0
 				dy = 0;
 				isFalling = false;
-				ytemp = (currRow+1) * tileSize + hitboxHeight / 2;
+				ytemp = (currRow+1) * tileSize - hitboxHeight / 2;
 			}
 			else
 			{

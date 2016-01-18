@@ -136,7 +136,7 @@ public class Player extends MapObject
 				if(dx < 0)
 					dx = 0;
 			}
-			else
+			else if(dx < 0)
 			{
 				dx += declerationSpeed;
 				if(dx > 0)
@@ -157,14 +157,14 @@ public class Player extends MapObject
 		// Falling Logic
 		if(isFalling)
 		{
-			// Apply gravity
-			if(dy > 0)
-			{
+			// Decrement by fall speed
+			dy += gravityFallSpeed;
+			
+			if(dy > 0) 
 				isJumping = false;
-				dy += gravityFallSpeed;
-			}
-			if(dy < 0 && !isJumping)
+			if(dy < 0 && !isJumping) 
 				dy += stopJumpSpeed;
+			
 			if(dy > maxFallSpeed)
 				dy = maxFallSpeed;
 		}
@@ -256,26 +256,4 @@ public class Player extends MapObject
 					null);
 		}
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 }
