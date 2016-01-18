@@ -84,6 +84,11 @@ public class TileMap
 			width = numCols * tileSize;
 			height = numRows * tileSize;
 			
+			xmin = GamePanel.WIDTH - width;
+			xmax = 0;
+			ymin = GamePanel.HEIGHT - height;
+			ymax = 0;
+			
 			String delims = "\\s+";
 			for(int row = 0; row < numRows; row++)
 			{
@@ -106,7 +111,10 @@ public class TileMap
 	public int getx() { return (int)Math.round(x); }
 	public int gety() { return (int)Math.round(y);}
 	public int getWidth() { return width;}
-	public int getHeight() { return height;}
+	public int getHeight() { return height;}	
+	public int getNumRows() { return numRows; }
+	public int getNumCols() { return numCols; }
+	
 	public int getType(int row, int col)
 	{
 		int rc = map[row][col];
@@ -157,10 +165,12 @@ public class TileMap
 				int c = rc % numTilesAcross;
 				
 				g.drawImage(tiles[r][c].getImage(), (int)x + col * tileSize, (int)y + row * tileSize, null);
-				
 			}
-			
 		}
+	}
+	public void setTween(int i) 
+	{
+		tween = i;
 	}
 
 }

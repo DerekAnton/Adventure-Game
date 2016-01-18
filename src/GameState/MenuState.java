@@ -2,8 +2,6 @@ package GameState;
 
 import java.awt.*;
 import TileMap.Background;
-import java.awt.event.KeyListener;
-
 import com.sun.glass.events.KeyEvent;
 
 public class MenuState extends GameState
