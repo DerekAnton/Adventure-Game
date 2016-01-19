@@ -73,7 +73,10 @@ public abstract class MapObject
 	// Fetches this' hit box
 	public Rectangle getRectangle()
 	{
-		return new Rectangle((int)x - hitboxWidth , (int)y - hitboxHeight, hitboxWidth, hitboxHeight);
+		return new Rectangle((int)x - hitboxWidth ,
+							 (int)y - hitboxHeight, 
+							 		  hitboxWidth, 
+							 		  hitboxHeight);
 	}
 	
 	// Takes in another map object and checks to see if this' hit box intersects the passsed in params hitbox
@@ -245,8 +248,8 @@ public abstract class MapObject
 	public boolean notOnScreen()
 	{
 		return x+xmap + spriteSheetWidth < 0 ||
+			   x+xmap - spriteSheetWidth > GamePanel.WIDTH ||
 			   y+ymap + spriteSheetHeight < 0 || 
-			   x+xmap - spriteSheetWidth > GamePanel.WIDTH || 
 			   y+ymap - spriteSheetHeight > GamePanel.HEIGHT;
 	}	
 }

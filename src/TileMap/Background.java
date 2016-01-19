@@ -51,17 +51,17 @@ public class Background
 	public void draw(Graphics2D g)
 	{
 		// Draws the background image at the current x,y coordinates 
-		g.drawImage(image, (int)Math.round(x), (int)Math.round(y), null);
+		g.drawImage(image, (int)x, (int)y, null);
 		
 		// If x is less than 0, we've scrolled the background too far
 		// To compensate, we draw an extra background to patch up the hole
 		if(x < 0)
 		{
-			g.drawImage(image, (int)Math.round(x) + GamePanel.WIDTH, (int)Math.round(y), null);
+			g.drawImage(image, (int)x + GamePanel.WIDTH, (int)y, null);
 		}
 		if(x > 0)
 		{
-			g.drawImage(image, (int)Math.round(x) - GamePanel.WIDTH, (int)Math.round(y), null);
+			g.drawImage(image, (int)x - GamePanel.WIDTH, (int)y, null);
 		}
 	}
 }

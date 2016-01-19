@@ -40,7 +40,8 @@ public class Stage1State extends GameState
 	public void update() 
 	{
 		player.update();
-		tileMap.setPosition(GamePanel.WIDTH/2-player.getx(), GamePanel.HEIGHT/2 - player.gety());
+		tileMap.setPosition(GamePanel.WIDTH / 2 - player.getx(),
+				GamePanel.HEIGHT / 2 - player.gety());
 	}
 
 	@Override

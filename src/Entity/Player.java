@@ -88,9 +88,13 @@ public class Player extends MapObject
 					// TODO hard coded here, since the tutorial sprite sheet normally has 
 					// animations of 30px each, but the melee attack has 60px, hence the skip on 6
 					if(sscounter != 6)
-						bi[iscounter] = spritesheet.getSubimage(iscounter * spriteSheetWidth, sscounter * spriteSheetHeight, spriteSheetWidth, spriteSheetHeight);
+						bi[iscounter] = spritesheet.getSubimage(iscounter * spriteSheetWidth, 
+								sscounter * spriteSheetHeight, spriteSheetWidth, 
+								spriteSheetHeight);
 					else
-						bi[iscounter] = spritesheet.getSubimage(iscounter * spriteSheetWidth * 2, sscounter * spriteSheetHeight, spriteSheetWidth, spriteSheetHeight);
+						bi[iscounter] = spritesheet.getSubimage(iscounter * spriteSheetWidth * 2, 
+								sscounter * spriteSheetHeight, spriteSheetWidth, 
+								spriteSheetHeight);
 				}
 				sprites.add(bi);
 			}
@@ -189,7 +193,7 @@ public class Player extends MapObject
 				spriteSheetWidth = 60;
 			}
 		}
-		else if(dy > 0)
+		else if(dy > 0) // We're falling
 		{
 			if(currentAction != FALLING)
 			{
@@ -198,7 +202,7 @@ public class Player extends MapObject
 				spriteSheetWidth = 30;
 			}
 		}
-		else if(dy < 0)
+		else if(dy < 0) // We're jumping
 		{
 			if(currentAction != JUMPING)
 			{
@@ -210,6 +214,11 @@ public class Player extends MapObject
 		}
 		else if (isMovingLeft || isMovingRight)
 		{
+			if(isMovingLeft)
+				isFacingRight = false;
+			if(isMovingRight)
+				isFacingRight = true;
+			
 			if(currentAction != WALKING)
 			{
 				currentAction = WALKING;
@@ -233,6 +242,7 @@ public class Player extends MapObject
 	
 	public void draw(Graphics2D g)
 	{
+		setMapPosition();
 		// After you are hit, you are flinching, which looks like blinking
 		if(flinching)
 		{
@@ -243,7 +253,7 @@ public class Player extends MapObject
 		if(isFacingRight)
 		{
 			g.drawImage(animation.getImage(), 
-					(int)(x+xmap - spriteSheetWidth/2), 
+					(int)(x + xmap - spriteSheetWidth/2), 
 					(int)(y + ymap - spriteSheetHeight/2),
 					null);
 		}
@@ -251,8 +261,10 @@ public class Player extends MapObject
 		{
 			// Draws the sprite flipped to the left
 			g.drawImage(animation.getImage(), 
-					(int)(x+xmap - spriteSheetWidth/2 + spriteSheetWidth), 
+					(int)(x + xmap - spriteSheetWidth/2 + spriteSheetWidth), 
 					(int)(y + ymap - spriteSheetHeight/2),
+					-spriteSheetWidth,
+					spriteSheetHeight,
 					null);
 		}
 	}
