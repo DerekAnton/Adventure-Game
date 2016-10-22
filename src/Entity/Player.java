@@ -88,13 +88,9 @@ public class Player extends MapObject
 					// TODO hard coded here, since the tutorial sprite sheet normally has 
 					// animations of 30px each, but the melee attack has 60px, hence the skip on 6
 					if(sscounter != 6)
-						bi[iscounter] = spritesheet.getSubimage(iscounter * spriteSheetWidth, 
-								sscounter * spriteSheetHeight, spriteSheetWidth, 
-								spriteSheetHeight);
+						bi[iscounter] = spritesheet.getSubimage(iscounter * spriteSheetWidth, sscounter * spriteSheetHeight, spriteSheetWidth, spriteSheetHeight);
 					else
-						bi[iscounter] = spritesheet.getSubimage(iscounter * spriteSheetWidth * 2, 
-								sscounter * spriteSheetHeight, spriteSheetWidth, 
-								spriteSheetHeight);
+						bi[iscounter] = spritesheet.getSubimage(iscounter * spriteSheetWidth * 2, sscounter * spriteSheetHeight, spriteSheetWidth, spriteSheetHeight);
 				}
 				sprites.add(bi);
 			}
@@ -119,21 +115,36 @@ public class Player extends MapObject
 	
 	private void getNextPosition()
 	{
-		// Left/Right Movement Logic
-		if(isMovingLeft)
-		{
+
+    if(isMovingLeft && isMovingRight)
+    {// If both left and right buttons are held down, idle
+      if(dx > 0)
+			{
+				dx -= declerationSpeed;
+				if(dx < 0)
+					dx = 0;
+			}
+			else if(dx < 0)
+			{
+				dx += declerationSpeed;
+				if(dx > 0)
+					dx = 0;
+			}
+    }
+    else if(isMovingLeft)
+		{// If only left is pressed, move in the negitive direction
 			dx -= moveSpeed;
 			if(dx < -maxMoveSpeed )
 				dx = -maxMoveSpeed;
 		}
 		else if(isMovingRight)
-		{
+		{// If only right is pressed, move in the positive direction
 			dx += moveSpeed;
 			if(dx > maxMoveSpeed )
 				dx = maxMoveSpeed;
 		}
 		else
-		{
+		{// we are not holding any keys, idle
 			if(dx > 0)
 			{
 				dx -= declerationSpeed;
@@ -195,6 +206,8 @@ public class Player extends MapObject
 		}
 		else if(dy > 0) // We're falling
 		{
+      HandleFacingDirection();
+      
 			if(currentAction != FALLING)
 			{
 				currentAction = FALLING;
@@ -204,6 +217,8 @@ public class Player extends MapObject
 		}
 		else if(dy < 0) // We're jumping
 		{
+      HandleFacingDirection();
+      
 			if(currentAction != JUMPING)
 			{
 				currentAction = JUMPING;
@@ -212,13 +227,20 @@ public class Player extends MapObject
 				spriteSheetWidth = 30;
 			}
 		}
+    else if (isMovingLeft && isMovingRight)
+    {
+      if(currentAction != IDLE)
+			{
+				currentAction = IDLE;
+				animation.setFrames(sprites.get(IDLE));
+				animation.setDelay(400);
+				spriteSheetWidth = 30;
+			}
+    }
 		else if (isMovingLeft || isMovingRight)
 		{
-			if(isMovingLeft)
-				isFacingRight = false;
-			if(isMovingRight)
-				isFacingRight = true;
-			
+      HandleFacingDirection();
+      
 			if(currentAction != WALKING)
 			{
 				currentAction = WALKING;
@@ -268,4 +290,12 @@ public class Player extends MapObject
 					null);
 		}
 	}
+  
+  public void HandleFacingDirection()
+  {
+    if(isMovingLeft)
+      isFacingRight = false;
+    if(isMovingRight)
+      isFacingRight = true;
+  }
 }
