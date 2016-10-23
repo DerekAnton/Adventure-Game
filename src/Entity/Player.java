@@ -16,7 +16,6 @@ public class Player extends MapObject
   private int jumpsRemaining;
 	private boolean dead;
 	private boolean flinching;
-	private long flinchTimer;
 	
 	// Fire ball
 	private boolean firing;
@@ -28,6 +27,11 @@ public class Player extends MapObject
 	private int attackDmg;
 	private int attackRange;
 	
+  // Timer
+  // *NOTE* To make the player flinch, call flinchStartTime = System.nanoTime(); in a conditional statement, This will kick off a 1.25 second flinch
+  private long flinchStartTime;
+  private long flinchElapsed;
+  
 	// Animations
 	private ArrayList<BufferedImage[]> sprites;
 	// how many frames each state has, i.e. walking has 8 frames, so map it to that final int below
@@ -43,6 +47,9 @@ public class Player extends MapObject
 	private static final int FALLING = 3;
 	private static final int ATTACKING = 5;
 	
+  // Bounds
+  private static final int BOTTOM_OF_MAP = 350;
+  
 	public Player(TileMap tm)
 	{
 		super(tm);
@@ -51,7 +58,10 @@ public class Player extends MapObject
 		hitboxWidth = 20;
 		hitboxHeight = 20;
     jumpsRemaining = 2;
-		
+    
+    flinchStartTime = -1;
+    flinchElapsed = 0;
+    
 		moveSpeed = 0.3;
 		maxMoveSpeed = 1.6;
 
@@ -159,7 +169,7 @@ public class Player extends MapObject
     // Jumping Logic
 		if(isJumping && !isFalling && jumpsRemaining == 2)
 		{
-			dy = jumpStart*1.4; // initial jump is short because of double jump logic, so increase it.
+			dy = jumpStart * 1.5; // initial jump is short because of double jump logic, so increase it.
 			isFalling = true;
       --jumpsRemaining;
       isJumping = false;
@@ -173,10 +183,10 @@ public class Player extends MapObject
       {
         dy = jumpStart;
         --jumpsRemaining; 
-        if(dy>0) isJumping = false;
         return;
       }
-      
+  
+      // gravity applied
 			dy += gravityFallSpeed;			
       
       if(dy > 0) 
@@ -191,6 +201,17 @@ public class Player extends MapObject
     // If we have landed, reset our jump counter
     if(!isJumping && !isFalling)
       jumpsRemaining = 2;
+          
+    // The player has fallen into a hole
+    if(y > BOTTOM_OF_MAP)
+    {
+      health -= 50;
+      flinchStartTime = System.nanoTime();
+      setPosition(100, 100); 
+    }
+    
+    // This will constantly check if the player has begun to flinch, denoted by flinchStartTime = System.nanoTime();
+    HandleFlinching();    
 	}
 	
 	public void update()
@@ -205,6 +226,7 @@ public class Player extends MapObject
 		{
 			if(currentAction != ATTACKING)
 			{
+        HandleFacingDirection();
 				currentAction = ATTACKING;
 				animation.setFrames(sprites.get(ATTACKING));
 				animation.setDelay(50);
@@ -275,7 +297,7 @@ public class Player extends MapObject
 		// After you are hit, you are flinching, which looks like blinking
 		if(flinching)
 		{
-			long elapsed = (System.nanoTime() - flinchTimer)/ 1000000;
+			long elapsed = System.nanoTime() / 1000000;
 			if(elapsed / 100 % 2 == 0)
 				return;
 		}
@@ -298,11 +320,28 @@ public class Player extends MapObject
 		}
 	}
   
-  public void HandleFacingDirection()
+  private void HandleFacingDirection()
   {
     if(isMovingLeft)
       isFacingRight = false;
     if(isMovingRight)
       isFacingRight = true;
+  }
+  
+  private void HandleFlinching()
+  {
+    // Begin flinch timer logic
+    if(flinchStartTime != -1)
+    { // If the flinch timer has started 
+      flinching = true;
+      flinchElapsed = (System.nanoTime() - flinchStartTime) / 1000000;
+    }
+    
+    if(flinchElapsed >= 1250)
+    { // If the player has flinched for 1.25 seconds, stop flinching
+      flinching = false;
+      flinchStartTime = -1;
+      flinchElapsed = 0;
+    }  
   }
 }
