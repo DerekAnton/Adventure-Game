@@ -13,6 +13,7 @@ public class Player extends MapObject
 	private int maxHealth;
 	private int fire;
 	private int maxFire;
+  private int jumpsRemaining;
 	private boolean dead;
 	private boolean flinching;
 	private long flinchTimer;
@@ -31,9 +32,9 @@ public class Player extends MapObject
 	private ArrayList<BufferedImage[]> sprites;
 	// how many frames each state has, i.e. walking has 8 frames, so map it to that final int below
 	private final int[] numFrames = 
-		{
-			2,8,1,2,4,2,5
-		};
+  {
+    2,8,1,2,4,2,5
+  };
 	
 	// Animation Actions
 	private static final int IDLE = 0 ;
@@ -49,6 +50,7 @@ public class Player extends MapObject
 		spriteSheetHeight = 30;
 		hitboxWidth = 20;
 		hitboxHeight = 20;
+    jumpsRemaining = 2;
 		
 		moveSpeed = 0.3;
 		maxMoveSpeed = 1.6;
@@ -85,7 +87,7 @@ public class Player extends MapObject
 				for(int iscounter = 0; iscounter < numFrames[sscounter]; iscounter++)
 				{
 					// animations of 30px each, iscounter corresponds with the static final Animation Actions declared above
-						bi[iscounter] = spritesheet.getSubimage(iscounter * spriteSheetWidth, sscounter * spriteSheetHeight, spriteSheetWidth, spriteSheetHeight);
+          bi[iscounter] = spritesheet.getSubimage(iscounter * spriteSheetWidth, sscounter * spriteSheetHeight, spriteSheetWidth, spriteSheetHeight);
         }
 				sprites.add(bi);
 			}
@@ -154,25 +156,41 @@ public class Player extends MapObject
 			}
 		}
 		
-		// Jumping Logic
-		if(isJumping && !isFalling)
+    // Jumping Logic
+		if(isJumping && !isFalling && jumpsRemaining == 2)
 		{
-			dy = jumpStart;
+			dy = jumpStart*1.4; // initial jump is short because of double jump logic, so increase it.
 			isFalling = true;
+      --jumpsRemaining;
+      isJumping = false;
 		}
 		// Falling Logic
-		if(isFalling)
+    else if(isFalling)
 		{ // Decrement by fall speed
-			dy += gravityFallSpeed;
-			
-			if(dy > 0) 
+
+			// Checks for second jump     
+      if(isJumping && jumpsRemaining != 0)
+      {
+        dy = jumpStart;
+        --jumpsRemaining; 
+        if(dy>0) isJumping = false;
+        return;
+      }
+      
+			dy += gravityFallSpeed;			
+      
+      if(dy > 0) 
 				isJumping = false;
 			if(dy < 0 && !isJumping) 
 				dy += stopJumpSpeed;
 			
 			if(dy > maxFallSpeed)
-				dy = maxFallSpeed;
+				dy = maxFallSpeed;        
 		}
+    
+    // If we have landed, reset our jump counter
+    if(!isJumping && !isFalling)
+      jumpsRemaining = 2;
 	}
 	
 	public void update()
@@ -183,7 +201,6 @@ public class Player extends MapObject
 		setPosition(xtemp, ytemp);
 		
 		// Basic State Checks
-		
 		if(isAttacking)
 		{
 			if(currentAction != ATTACKING)
