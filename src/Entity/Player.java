@@ -22,17 +22,16 @@ public class Player extends MapObject
 	private int fireCost;
 	private int fireBallDamage;
 	
-	// Melee
-	private boolean isMeleeAttacking;
-	private int meleeAttackDmg;
-	private int meleeRange;
+	// Attack
+	private boolean isAttacking;
+	private int attackDmg;
+	private int attackRange;
 	
 	// Animations
 	private ArrayList<BufferedImage[]> sprites;
 	// how many frames each state has, i.e. walking has 8 frames, so map it to that final int below
 	private final int[] numFrames = 
 		{
-			// TODO these values are from the tutorial, change later
 			2,8,1,2,4,2,5
 		};
 	
@@ -41,7 +40,7 @@ public class Player extends MapObject
 	private static final int WALKING = 1;
 	private static final int JUMPING = 2;
 	private static final int FALLING = 3;
-	private static final int MELEEATTACKING = 6;
+	private static final int ATTACKING = 5;
 	
 	public Player(TileMap tm)
 	{
@@ -67,8 +66,8 @@ public class Player extends MapObject
 		
 		fireBallDamage = 5;
 		
-		meleeAttackDmg = 8;
-		meleeRange = 40;// pixles
+		attackDmg = 8;
+		attackRange = 40;// pixles
 		
 		// Load Sprite sheet
 		try
@@ -85,13 +84,9 @@ public class Player extends MapObject
 				// iscounter stands for Individual Sprite counter
 				for(int iscounter = 0; iscounter < numFrames[sscounter]; iscounter++)
 				{
-					// TODO hard coded here, since the tutorial sprite sheet normally has 
-					// animations of 30px each, but the melee attack has 60px, hence the skip on 6
-					if(sscounter != 6)
+					// animations of 30px each, iscounter corresponds with the static final Animation Actions declared above
 						bi[iscounter] = spritesheet.getSubimage(iscounter * spriteSheetWidth, sscounter * spriteSheetHeight, spriteSheetWidth, spriteSheetHeight);
-					else
-						bi[iscounter] = spritesheet.getSubimage(iscounter * spriteSheetWidth * 2, sscounter * spriteSheetHeight, spriteSheetWidth, spriteSheetHeight);
-				}
+        }
 				sprites.add(bi);
 			}
 		}
@@ -111,13 +106,13 @@ public class Player extends MapObject
 	public int getMaxFire(){return maxFire;}
 	
 	public void setFiring(){firing = true;}
-	public void setMeleeAttacking(boolean b){isMeleeAttacking = b;}
+	public void setAttacking(boolean b){isAttacking = b;}
 	
 	private void getNextPosition()
 	{
 
     if(isMovingLeft && isMovingRight)
-    {// If both left and right buttons are held down, idle
+    { // If both left and right buttons are held down, idle
       if(dx > 0)
 			{
 				dx -= declerationSpeed;
@@ -132,19 +127,19 @@ public class Player extends MapObject
 			}
     }
     else if(isMovingLeft)
-		{// If only left is pressed, move in the negitive direction
+		{ // If only left is pressed, move in the negitive direction
 			dx -= moveSpeed;
 			if(dx < -maxMoveSpeed )
 				dx = -maxMoveSpeed;
 		}
 		else if(isMovingRight)
-		{// If only right is pressed, move in the positive direction
+		{ // If only right is pressed, move in the positive direction
 			dx += moveSpeed;
 			if(dx > maxMoveSpeed )
 				dx = maxMoveSpeed;
 		}
 		else
-		{// we are not holding any keys, idle
+		{ // we are not holding any keys, idle
 			if(dx > 0)
 			{
 				dx -= declerationSpeed;
@@ -159,10 +154,6 @@ public class Player extends MapObject
 			}
 		}
 		
-		// Logic to stop the player from attacking while moving on the ground
-		// they can attack while airbourn however.
-		if(currentAction == MELEEATTACKING && !(isJumping || isFalling))
-			dx = 0;
 		// Jumping Logic
 		if(isJumping && !isFalling)
 		{
@@ -171,8 +162,7 @@ public class Player extends MapObject
 		}
 		// Falling Logic
 		if(isFalling)
-		{
-			// Decrement by fall speed
+		{ // Decrement by fall speed
 			dy += gravityFallSpeed;
 			
 			if(dy > 0) 
@@ -194,12 +184,12 @@ public class Player extends MapObject
 		
 		// Basic State Checks
 		
-		if(isMeleeAttacking)
+		if(isAttacking)
 		{
-			if(currentAction != MELEEATTACKING)
+			if(currentAction != ATTACKING)
 			{
-				currentAction = MELEEATTACKING;
-				animation.setFrames(sprites.get(MELEEATTACKING));
+				currentAction = ATTACKING;
+				animation.setFrames(sprites.get(ATTACKING));
 				animation.setDelay(50);
 				spriteSheetWidth = 60;
 			}
