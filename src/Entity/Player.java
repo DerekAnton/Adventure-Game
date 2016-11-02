@@ -85,7 +85,7 @@ public class Player extends MapObject
 		try
 		{
 			BufferedImage spritesheet = ImageIO.read(getClass().getResourceAsStream("/MCs/playersprites.gif"));
-
+	
 			sprites = new ArrayList<BufferedImage[]>();
 			// Iterate through each sprite set (walking, idle, attacking etc)
 			// sscounter stands for Sprite Set Counter
@@ -191,8 +191,7 @@ public class Player extends MapObject
 		// Jumping Logic
 		if (isJumping && !isFalling && jumpsRemaining == 2)
 		{
-			dy = jumpStart * 1.5; // initial jump is short because of double jump
-														// logic,
+			dy = jumpStart * 1.5; // initial jump is short because of double jump logic,
 														// so increase it.
 			isFalling = true;
 			--jumpsRemaining;
