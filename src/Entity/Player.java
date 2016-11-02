@@ -2,6 +2,7 @@ package Entity;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
@@ -54,7 +55,8 @@ public class Player extends MapObject
 	{
 		super(tm);
 		spriteSheetWidth = 30;
-		spriteSheetHeight = 30;
+		spriteSheetHeight = 30;	
+		
 		hitboxWidth = 20;
 		hitboxHeight = 20;
 		jumpsRemaining = 2;
@@ -81,37 +83,8 @@ public class Player extends MapObject
 		attackDmg = 8;
 		attackRange = 40;// pixles
 
-		// Load Sprite sheet
-		try
-		{
-			BufferedImage spritesheet = ImageIO.read(getClass().getResourceAsStream("/MCs/playersprites.gif"));
-	
-			sprites = new ArrayList<BufferedImage[]>();
-			// Iterate through each sprite set (walking, idle, attacking etc)
-			// sscounter stands for Sprite Set Counter
-			for (int sscounter = 0; sscounter < 7; sscounter++)
-			{
-				BufferedImage[] bi = new BufferedImage[numFrames[sscounter]];
-				// Iterate through individual sprite sets to get each frame
-				// iscounter stands for Individual Sprite counter
-				for (int iscounter = 0; iscounter < numFrames[sscounter]; iscounter++)
-				{
-					// animations of 30px each, iscounter corresponds with the static
-					// final
-					// Animation Actions declared above
-					bi[iscounter] = spritesheet.getSubimage(iscounter * spriteSheetWidth, sscounter * spriteSheetHeight,
-							spriteSheetWidth, spriteSheetHeight);
-				}
-				sprites.add(bi);
-			}
-		} catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-		animation = new Animation();
-		currentAction = IDLE;
-		animation.setFrames(sprites.get(IDLE));
-		animation.setDelay(400);
+		// Logic to load the mc's sprite sheet with animations.
+		LoadMainCharacterSpriteSheet();
 	}
 
 	public int getHealth()
@@ -155,32 +128,37 @@ public class Player extends MapObject
 				dx -= declerationSpeed;
 				if (dx < 0)
 					dx = 0;
-			} else if (dx < 0)
+			} 
+			else if (dx < 0)
 			{
 				dx += declerationSpeed;
 				if (dx > 0)
 					dx = 0;
 			}
-		} else if (isMovingLeft)
-		{ // If only left is pressed, move in the negitive
+		} 
+		else if (isMovingLeft)
+		{ // If only left is pressed, move in the negative
 			// direction
 			dx -= moveSpeed;
 			if (dx < -maxMoveSpeed)
 				dx = -maxMoveSpeed;
-		} else if (isMovingRight)
+		} 
+		else if (isMovingRight)
 		{ // If only right is pressed, move in the positive
 			// direction
 			dx += moveSpeed;
 			if (dx > maxMoveSpeed)
 				dx = maxMoveSpeed;
-		} else
+		} 
+		else
 		{ // we are not holding any keys, idle
 			if (dx > 0)
 			{
 				dx -= declerationSpeed;
 				if (dx < 0)
 					dx = 0;
-			} else if (dx < 0)
+			} 
+			else if (dx < 0)
 			{
 				dx += declerationSpeed;
 				if (dx > 0)
@@ -200,7 +178,6 @@ public class Player extends MapObject
 		// Falling Logic
 		else if (isFalling)
 		{ // Decrement by fall speed
-
 			// Checks for second jump
 			if (isJumping && jumpsRemaining != 0)
 			{
@@ -256,7 +233,8 @@ public class Player extends MapObject
 				animation.setDelay(50);
 				spriteSheetWidth = 60;
 			}
-		} else if (dy > 0) // We're falling
+		} 
+		else if (dy > 0) // We're falling
 		{
 			HandleFacingDirection();
 
@@ -266,7 +244,8 @@ public class Player extends MapObject
 				animation.setFrames(sprites.get(FALLING));
 				spriteSheetWidth = 30;
 			}
-		} else if (dy < 0) // We're jumping
+		} 
+		else if (dy < 0) // We're jumping
 		{
 			HandleFacingDirection();
 
@@ -278,7 +257,8 @@ public class Player extends MapObject
 																// jumping
 				spriteSheetWidth = 30;
 			}
-		} else if (isMovingLeft && isMovingRight)
+		} 
+		else if (isMovingLeft && isMovingRight)
 		{
 			if (currentAction != IDLE)
 			{
@@ -287,7 +267,8 @@ public class Player extends MapObject
 				animation.setDelay(400);
 				spriteSheetWidth = 30;
 			}
-		} else if (isMovingLeft || isMovingRight)
+		} 
+		else if (isMovingLeft || isMovingRight)
 		{
 			HandleFacingDirection();
 
@@ -298,7 +279,8 @@ public class Player extends MapObject
 				animation.setDelay(40);
 				spriteSheetWidth = 30;
 			}
-		} else // Player is Idle
+		} 
+		else // Player is Idle
 		{
 			if (currentAction != IDLE)
 			{
@@ -321,16 +303,18 @@ public class Player extends MapObject
 			if (elapsed / 100 % 2 == 0)
 				return;
 		}
+		
 		if (isFacingRight)
 		{
 			g.drawImage(animation.getImage(), (int) (x + xmap - spriteSheetWidth / 2),
 					(int) (y + ymap - spriteSheetHeight / 2), null);
-		} else
+		} 
+		else
 		{
 			// Draws the sprite flipped to the left
 			g.drawImage(animation.getImage(), (int) (x + xmap - spriteSheetWidth / 2 + spriteSheetWidth),
 					(int) (y + ymap - spriteSheetHeight / 2), -spriteSheetWidth, spriteSheetHeight, null);
-		}
+		}		
 	}
 
 	private void HandleFacingDirection()
@@ -357,5 +341,35 @@ public class Player extends MapObject
 			flinchStartTime = -1;
 			flinchElapsed = 0;
 		}
+	}
+	
+	private void LoadMainCharacterSpriteSheet()
+	{
+			try
+			{
+				BufferedImage spritesheet = ImageIO.read(getClass().getResourceAsStream("/MCs/playersprites.gif"));
+		
+				sprites = new ArrayList<BufferedImage[]>();
+				// Iterate through each sprite set (walking, idle, attacking etc) sscounter stands for Sprite Set Counter
+				for (int sscounter = 0; sscounter < 7; ++sscounter)
+				{
+					BufferedImage[] bi = new BufferedImage[numFrames[sscounter]];
+					// Iterate through individual sprite sets to get each frame iscounter stands for Individual Sprite counter
+					for (int iscounter = 0; iscounter < numFrames[sscounter]; ++iscounter)
+					{
+						// animations of 30px each, iscounter corresponds with the static final Animation Actions declared above
+						bi[iscounter] = spritesheet.getSubimage(iscounter * spriteSheetWidth, sscounter * spriteSheetHeight, spriteSheetWidth, spriteSheetHeight);
+					}
+					sprites.add(bi);
+				}
+			} 
+			catch (Exception e)
+			{
+				e.printStackTrace();
+			}
+			animation = new Animation();
+			currentAction = IDLE;
+			animation.setFrames(sprites.get(IDLE));
+			animation.setDelay(400);
 	}
 }

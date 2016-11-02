@@ -3,6 +3,7 @@ package TileMap;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
@@ -41,6 +42,8 @@ public class TileMap
 	private int colOffset;
 	private int numRowsToDraw;
 	private int numColsToDraw;
+	
+	private BufferedImage[] UiSprites = new BufferedImage[3];
 
 	public TileMap(int tileSize)
 	{
@@ -68,7 +71,15 @@ public class TileMap
 				subimage = tileset.getSubimage(col * tileSize, tileSize, tileSize, tileSize);
 				tiles[1][col] = new Tile(subimage, Tile.BLOCKED);
 			}
-		} catch (Exception e)
+			
+			// Load UI
+			BufferedImage interimSheet = ImageIO.read(getClass().getResourceAsStream("/MCs/HealthBar.png"));			
+			// 199W x 28H, the metal health bar size
+			UiSprites[0] = interimSheet.getSubimage(0, 2, 199, 28);	
+			// 191W x 17H, the inner part of health bar. 200 is X-axis pixel, 13 is Y-Axis pixel offset.
+			UiSprites[1] = interimSheet.getSubimage(200, 13, 191, 17);
+		} 
+		catch (Exception e)
 		{
 			e.printStackTrace();
 		}
@@ -102,7 +113,8 @@ public class TileMap
 					map[row][col] = Integer.parseInt(tokens[col]);
 				}
 			}
-		} catch (Exception e)
+		} 
+		catch (Exception e)
 		{
 			e.printStackTrace();
 		}
@@ -200,8 +212,13 @@ public class TileMap
 				g.drawImage(tiles[r][c].getImage(), (int) x + col * tileSize, (int) y + row * tileSize, null);
 			}
 		}
+		
+		// Draw UI elements
+		// BUGGED -> UI moves right with character. needs to be fixed.
+		g.drawImage(UiSprites[0], colOffset, rowOffset, null);
+		g.drawImage(UiSprites[1], colOffset, rowOffset + 5, null);
 	}
-
+	
 	public void setTween(int i)
 	{
 		tween = i;
