@@ -14,11 +14,4 @@
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>Resources/MCs/HealthBar.png</name>
-			<type>1</type>
-			<location>C:/Users/Danton/git/Adventure-Game/Resources/MCs/HealthBar.png</location>
-		</link>
-	</linkedResources>
 </projectDescription>
