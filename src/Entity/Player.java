@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
+import Main.GamePanel;
 import TileMap.TileMap;
 
 public class Player extends MapObject
@@ -37,7 +38,6 @@ public class Player extends MapObject
 
 	// Animations
 	private ArrayList<BufferedImage[]> sprites;
-	private BufferedImage[] UiSprites = new BufferedImage[3];
 	// how many frames each state has, i.e. walking has 8 frames, so map it to
 	// that final int below
 	private final int[] numFrames = { 2, 8, 1, 2, 4, 2, 5 };
@@ -76,7 +76,7 @@ public class Player extends MapObject
 
 		isFacingRight = true;
 
-		health = maxHealth = 5;
+		health = maxHealth = 100;
 		fire = maxFire = 2500;
 
 		fireBallDamage = 5;
@@ -206,7 +206,8 @@ public class Player extends MapObject
 		// The player has fallen into a hole
 		if (y > BOTTOM_OF_MAP)
 		{
-			health -= 50;
+			health -= 10;
+			tileMap.setPlayersHealth(health);
 			flinchStartTime = System.nanoTime();
 			setPosition(100, 100);
 		}
@@ -316,11 +317,6 @@ public class Player extends MapObject
 			g.drawImage(animation.getImage(), (int) (x + xmap - spriteSheetWidth / 2 + spriteSheetWidth),
 					(int) (y + ymap - spriteSheetHeight / 2), -spriteSheetWidth, spriteSheetHeight, null);
 		}		
-		
-		// Draw UI elements
-		// BUGGED -> map does not move in the beginning, so need to compensate for this when drawing the UI.
-		g.drawImage(UiSprites[0], (int)(xmap-160 + x), 0, null);
-		g.drawImage(UiSprites[1], (int)(xmap-155 + x), 5, null);
 	}
 
 	private void HandleFacingDirection()
@@ -368,13 +364,6 @@ public class Player extends MapObject
 					}
 					sprites.add(bi);
 				}
-				
-				// Load UI
-				BufferedImage interimSheet = ImageIO.read(getClass().getResourceAsStream("/MCs/HealthBar.png"));			
-				// 199W x 28H, the metal health bar size
-				UiSprites[0] = interimSheet.getSubimage(0, 2, 199, 28);	
-				// 191W x 17H, the inner part of health bar. 200 is X-axis pixel, 13 is Y-Axis pixel offset.
-				UiSprites[1] = interimSheet.getSubimage(200, 13, 191, 17);
 			} 
 			catch (Exception e)
 			{

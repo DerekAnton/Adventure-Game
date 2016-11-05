@@ -43,6 +43,9 @@ public class TileMap
 	private int numRowsToDraw;
 	private int numColsToDraw;
 	
+	// UI
+	private BufferedImage[] UiSprites = new BufferedImage[3];
+	
 
 	public TileMap(int tileSize)
 	{
@@ -51,6 +54,21 @@ public class TileMap
 		numColsToDraw = GamePanel.WIDTH / tileSize + 2;
 		
 		tween = 0.07;
+		
+		// Load UI
+		BufferedImage interimSheet = null;
+		try 
+		{
+			interimSheet = ImageIO.read(getClass().getResourceAsStream("/MCs/HealthBar.png"));
+		} 
+		catch (IOException e) 
+		{
+			e.printStackTrace();
+		}			
+		// 199W x 28H, the metal health bar size
+		UiSprites[0] = interimSheet.getSubimage(0, 2, 199, 28);	
+		// 191W x 17H, the inner part of health bar. 200 is X-axis pixel, 13 is Y-Axis pixel offset.
+		UiSprites[1] = interimSheet.getSubimage(200, 13, 191, 17);
 	}
 
 	// Read tile images from path
@@ -122,10 +140,30 @@ public class TileMap
 	{
 		return (int) Math.round(x);
 	}
+	
+	public int getxMin()
+	{
+		return (int) Math.round(xmin);
+	}
+	
+	public int getxMax()
+	{
+		return (int) Math.round(xmax);
+	}
 
 	public int gety()
 	{
 		return (int) Math.round(y);
+	}
+	
+	public int getyMax()
+	{
+		return (int) Math.round(ymax);
+	}
+	
+	public int getyMin()
+	{
+		return (int) Math.round(ymin);
 	}
 
 	public int getWidth()
@@ -204,11 +242,27 @@ public class TileMap
 				g.drawImage(tiles[r][c].getImage(), (int) x + col * tileSize, (int) y + row * tileSize, null);
 			}
 		}
+		
+		// Draw UI elements
+		// Always draw the UI at 0,0 of the screen
+		g.drawImage(UiSprites[0], 0, 0, null);
+		g.drawImage(UiSprites[1], 5, 5, null);
 	}
 	
 	public void setTween(int i)
 	{
 		tween = i;
 	}
+	
+	public double getTween()
+	{
+		return tween;
+	}
+	
+	public void setPlayersHealth(int playersHealth)
+	{
+		//UiSprites[1] = UiSprites[1].getSubimage(0, 0, 191 * (playersHealth/100), 17);
+	}
+	
 
 }
