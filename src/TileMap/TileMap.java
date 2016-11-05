@@ -45,6 +45,8 @@ public class TileMap
 	
 	// UI
 	private BufferedImage[] UiSprites = new BufferedImage[3];
+	BufferedImage interimSheet;
+	
 	
 
 	public TileMap(int tileSize)
@@ -56,7 +58,7 @@ public class TileMap
 		tween = 0.07;
 		
 		// Load UI
-		BufferedImage interimSheet = null;
+		interimSheet = null;
 		try 
 		{
 			interimSheet = ImageIO.read(getClass().getResourceAsStream("/MCs/HealthBar.png"));
@@ -69,6 +71,7 @@ public class TileMap
 		UiSprites[0] = interimSheet.getSubimage(0, 2, 199, 28);	
 		// 191W x 17H, the inner part of health bar. 200 is X-axis pixel, 13 is Y-Axis pixel offset.
 		UiSprites[1] = interimSheet.getSubimage(200, 13, 191, 17);
+		
 	}
 
 	// Read tile images from path
@@ -259,9 +262,20 @@ public class TileMap
 		return tween;
 	}
 	
-	public void setPlayersHealth(int playersHealth)
+	public void setPlayersHealth(double playersHealth)
 	{
-		//UiSprites[1] = UiSprites[1].getSubimage(0, 0, 191 * (playersHealth/100), 17);
+		// Takes in the current amount of health the player has and draws that exact amount as a bar
+		if(playersHealth > 0)
+		{
+			double holder = 191 * (playersHealth/100);
+			UiSprites[1] = interimSheet.getSubimage(200, 13, (int)Math.round(holder), 17);
+		}
+		else
+		{
+			// If the hero has 0 health, draw the smallest amount of life possible. They have died.
+			UiSprites[1] = interimSheet.getSubimage(200, 13, 1, 17);
+		}
+			
 	}
 	
 

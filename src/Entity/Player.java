@@ -206,7 +206,7 @@ public class Player extends MapObject
 		// The player has fallen into a hole
 		if (y > BOTTOM_OF_MAP)
 		{
-			health -= 10;
+			health -= 25;
 			tileMap.setPlayersHealth(health);
 			flinchStartTime = System.nanoTime();
 			setPosition(100, 100);
