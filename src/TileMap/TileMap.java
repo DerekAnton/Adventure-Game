@@ -68,9 +68,9 @@ public class TileMap
 			e.printStackTrace();
 		}			
 		// 199W x 28H, the metal health bar size
-		UiSprites[0] = interimSheet.getSubimage(0, 2, 199, 28);	
+		UiSprites[0] = interimSheet.getSubimage(0, 1, 157, 23);	
 		// 191W x 17H, the inner part of health bar. 200 is X-axis pixel, 13 is Y-Axis pixel offset.
-		UiSprites[1] = interimSheet.getSubimage(200, 13, 191, 17);
+		UiSprites[1] = interimSheet.getSubimage(156, 10, 148, 13);
 		
 	}
 
@@ -249,7 +249,7 @@ public class TileMap
 		// Draw UI elements
 		// Always draw the UI at 0,0 of the screen
 		g.drawImage(UiSprites[0], 0, 0, null);
-		g.drawImage(UiSprites[1], 5, 5, null);
+		g.drawImage(UiSprites[1], 4, 5, null);
 	}
 	
 	public void setTween(int i)
@@ -264,19 +264,13 @@ public class TileMap
 	
 	public void setPlayersHealth(double playersHealth)
 	{
-		// Takes in the current amount of health the player has and draws that exact amount as a bar
 		if(playersHealth > 0)
-		{
-			double holder = 191 * (playersHealth/100);
-			UiSprites[1] = interimSheet.getSubimage(200, 13, (int)Math.round(holder), 17);
+		{// Takes in the current amount of health the player has and draws that exact amount as a bar
+			UiSprites[1] = interimSheet.getSubimage(156, 10, (int)Math.round( 148 * (playersHealth/100)), 13);
 		}
 		else
-		{
-			// If the hero has 0 health, draw the smallest amount of life possible. They have died.
-			UiSprites[1] = interimSheet.getSubimage(200, 13, 1, 17);
+		{// If the hero has 0 health, draw the smallest amount of life possible. They have died.
+			UiSprites[1] = interimSheet.getSubimage(156, 10, 1, 13);
 		}
-			
 	}
-	
-
 }
