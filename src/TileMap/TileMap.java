@@ -70,7 +70,7 @@ public class TileMap
 		// 199W x 28H, the metal health bar size
 		UiSprites[0] = interimSheet.getSubimage(0, 1, 157, 23);	
 		// 191W x 17H, the inner part of health bar. 200 is X-axis pixel, 13 is Y-Axis pixel offset.
-		UiSprites[1] = interimSheet.getSubimage(156, 10, 148, 13);
+		UiSprites[1] = interimSheet.getSubimage(156, 10, 152, 13);
 		
 	}
 
@@ -249,7 +249,7 @@ public class TileMap
 		// Draw UI elements
 		// Always draw the UI at 0,0 of the screen
 		g.drawImage(UiSprites[0], 0, 0, null);
-		g.drawImage(UiSprites[1], 4, 5, null);
+		g.drawImage(UiSprites[1], 1, 5, null);
 	}
 	
 	public void setTween(int i)
