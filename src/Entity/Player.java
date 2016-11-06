@@ -374,4 +374,47 @@ public class Player extends MapObject
 			animation.setFrames(sprites.get(IDLE));
 			animation.setDelay(400);
 	}
+	
+	public void setUpElement()
+	{
+		TileMap.Element currElement = tileMap.getUpElement();
+		
+		switch (currElement)
+		{
+			case NONE:
+				tileMap.setUpElement(TileMap.Element.FIRE);
+				break;
+			case FIRE:
+				tileMap.setUpElement(TileMap.Element.EARTH);
+				break;
+			case EARTH:
+				tileMap.setUpElement(TileMap.Element.WIND);
+				break;
+			case WIND:
+				tileMap.setUpElement(TileMap.Element.NONE);
+				break;
+		}	
+	}
+	
+	public void setDownElement()
+	{
+		TileMap.Element currElement = tileMap.getDownElement();
+		
+		switch (currElement)
+		{
+			case NONE:
+				tileMap.setDownElement(TileMap.Element.FIRE);
+				break;
+			case FIRE:
+				tileMap.setDownElement(TileMap.Element.EARTH);
+				break;
+			case EARTH:
+				tileMap.setDownElement(TileMap.Element.WIND);
+				break;
+			case WIND:
+				tileMap.setDownElement(TileMap.Element.NONE);
+				break;
+		}	
+	}
+	
 }

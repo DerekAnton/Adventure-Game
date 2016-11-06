@@ -62,9 +62,9 @@ public class Stage1State extends GameState
 		if (k == KeyEvent.VK_RIGHT)
 			player.setIsMovingRight(true);
 		if (k == KeyEvent.VK_UP)
-			player.setIsMovingUp(true);
+			player.setUpElement();
 		if (k == KeyEvent.VK_DOWN)
-			player.setIsMovingDown(true);
+			player.setDownElement();
 		if (k == KeyEvent.VK_SHIFT)
 			player.setIsJumping(true);
 		if (k == KeyEvent.VK_Z)

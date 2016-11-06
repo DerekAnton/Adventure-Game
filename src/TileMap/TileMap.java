@@ -13,6 +13,18 @@ import Main.GamePanel;
 
 public class TileMap
 {
+	public enum Element
+	{
+		NONE(-1), FIRE(0), EARTH(1), WIND(2);
+		
+		private int val;
+		
+		Element(int i)
+		{
+			val = i;
+		}
+	};
+	
 	private double x;
 	private double y;
 
@@ -42,10 +54,14 @@ public class TileMap
 	private int colOffset;
 	private int numRowsToDraw;
 	private int numColsToDraw;
+	private Element currentElementUp;
+	private Element currentElementDown;
 	
 	// UI
 	private BufferedImage[] UiSprites = new BufferedImage[3];
-	BufferedImage interimSheet;
+	private BufferedImage interimSheet;
+	
+	private BufferedImage[] UiElements = new BufferedImage[3];
 	
 	
 
@@ -57,11 +73,18 @@ public class TileMap
 		
 		tween = 0.07;
 		
+		 currentElementUp = Element.NONE;
+		 currentElementDown = Element.NONE;
+		
 		// Load UI
+		BufferedImage interimElementContainer = null;
+		BufferedImage interimElements = null;
 		interimSheet = null;
 		try 
 		{
 			interimSheet = ImageIO.read(getClass().getResourceAsStream("/MCs/HealthBar.png"));
+			interimElementContainer = ImageIO.read(getClass().getResourceAsStream("/MCs/ElementContainer.png"));
+			interimElements = ImageIO.read(getClass().getResourceAsStream("/MCs/Elements.png"));
 		} 
 		catch (IOException e) 
 		{
@@ -72,6 +95,16 @@ public class TileMap
 		// 191W x 17H, the inner part of health bar. 200 is X-axis pixel, 13 is Y-Axis pixel offset.
 		UiSprites[1] = interimSheet.getSubimage(156, 10, 152, 13);
 		
+		// Element Container
+		UiSprites[2] = interimElementContainer.getSubimage(0, 1, 26, 23);
+		
+		// Three Elements
+		// Fire
+		UiElements[0] = interimElements.getSubimage(6, 6, 22, 13);
+		// Earth
+		UiElements[1] = interimElements.getSubimage(30, 7, 16, 9);
+		// Wind
+		UiElements[2] = interimElements.getSubimage(52, 7, 13, 10);
 	}
 
 	// Read tile images from path
@@ -246,10 +279,22 @@ public class TileMap
 			}
 		}
 		
-		// Draw UI elements
-		// Always draw the UI at 0,0 of the screen
+		// Draw UI The UI does not need any math when drawing to the screen, as it will be a static position.
+		
+		// Health Bar
 		g.drawImage(UiSprites[0], 0, 0, null);
 		g.drawImage(UiSprites[1], 1, 5, null);
+		
+		// Element Containers
+		g.drawImage(UiSprites[2], GamePanel.WIDTH - 26, 0, null);
+		g.drawImage(UiSprites[2], GamePanel.WIDTH - 26, 25, null);
+		
+		// Draw up and down elements if they are not NONE
+		if(currentElementUp.val != -1)
+			g.drawImage(UiElements[currentElementUp.val], GamePanel.WIDTH - 26 + 5, 5, null);
+		if(currentElementDown.val != -1)
+			g.drawImage(UiElements[currentElementDown.val], GamePanel.WIDTH - 26 + 5, 25 + 5, null);
+		
 	}
 	
 	public void setTween(int i)
@@ -273,4 +318,25 @@ public class TileMap
 			UiSprites[1] = interimSheet.getSubimage(156, 10, 1, 13);
 		}
 	}
+
+	public void setUpElement(Element element)
+	{
+		currentElementUp = element;
+	}
+	
+	public Element getUpElement()
+	{
+		return currentElementUp;
+	}
+	
+	public void setDownElement(Element element)
+	{
+		currentElementDown = element;
+	}
+	
+	public Element getDownElement()
+	{
+		return currentElementDown;
+	}
+	
 }
