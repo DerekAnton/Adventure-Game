@@ -1,5 +1,7 @@
 package TileMap;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
@@ -10,14 +12,16 @@ import java.io.InputStreamReader;
 import javax.imageio.ImageIO;
 
 import Main.GamePanel;
+import Entity.ItemDrop;
+import Entity.PlayerUI;
 
 public class TileMap
 {
 	public enum Element
 	{
-		NONE(-1), FIRE(0), EARTH(1), WIND(2);
+		NONE(0), FIRE(1), EARTH(2), WIND(3);
 		
-		private int val;
+		public int val;
 		
 		Element(int i)
 		{
@@ -27,9 +31,6 @@ public class TileMap
 	
 	private double x;
 	private double y;
-
-	// for smooth scrolling
-	private double tween;
 
 	private int xmin;
 	private int ymin;
@@ -54,15 +55,10 @@ public class TileMap
 	private int colOffset;
 	private int numRowsToDraw;
 	private int numColsToDraw;
-	private Element currentElementUp;
-	private Element currentElementDown;
+		
+	private PlayerUI playerUi;
 	
-	// UI
-	private BufferedImage[] UiSprites = new BufferedImage[3];
-	private BufferedImage interimSheet;
-	
-	private BufferedImage[] UiElements = new BufferedImage[3];
-	
+	private ItemDrop itemDropPlaceholder;
 	
 
 	public TileMap(int tileSize)
@@ -71,40 +67,11 @@ public class TileMap
 		numRowsToDraw = GamePanel.HEIGHT / tileSize + 2;
 		numColsToDraw = GamePanel.WIDTH / tileSize + 2;
 		
-		tween = 0.07;
+		// Load the UI
+		playerUi = new PlayerUI();
 		
-		 currentElementUp = Element.NONE;
-		 currentElementDown = Element.NONE;
-		
-		// Load UI
-		BufferedImage interimElementContainer = null;
-		BufferedImage interimElements = null;
-		interimSheet = null;
-		try 
-		{
-			interimSheet = ImageIO.read(getClass().getResourceAsStream("/MCs/HealthBar.png"));
-			interimElementContainer = ImageIO.read(getClass().getResourceAsStream("/MCs/ElementContainer.png"));
-			interimElements = ImageIO.read(getClass().getResourceAsStream("/MCs/Elements.png"));
-		} 
-		catch (IOException e) 
-		{
-			e.printStackTrace();
-		}			
-		// 199W x 28H, the metal health bar size
-		UiSprites[0] = interimSheet.getSubimage(0, 1, 157, 23);	
-		// 191W x 17H, the inner part of health bar. 200 is X-axis pixel, 13 is Y-Axis pixel offset.
-		UiSprites[1] = interimSheet.getSubimage(156, 10, 152, 13);
-		
-		// Element Container
-		UiSprites[2] = interimElementContainer.getSubimage(0, 1, 26, 23);
-		
-		// Three Elements
-		// Fire
-		UiElements[0] = interimElements.getSubimage(6, 6, 22, 13);
-		// Earth
-		UiElements[1] = interimElements.getSubimage(30, 7, 16, 9);
-		// Wind
-		UiElements[2] = interimElements.getSubimage(52, 7, 13, 10);
+		// Item Drop Placeholder
+		itemDropPlaceholder = new ItemDrop(this);// maybe change where item drops are saved? awkward being here passing this.
 	}
 
 	// Read tile images from path
@@ -117,7 +84,7 @@ public class TileMap
 			tiles = new Tile[2][numTilesAcross];
 
 			BufferedImage subimage;
-			for (int col = 0; col < numTilesAcross; col++)
+			for (int col = 0; col < numTilesAcross; ++col)
 			{
 				subimage = tileset.getSubimage(col * tileSize, 0, tileSize, tileSize);
 				tiles[0][col] = new Tile(subimage, Tile.NORMAL);
@@ -232,8 +199,8 @@ public class TileMap
 
 	public void setPosition(double x, double y)
 	{
-		this.x += (x - this.x) * tween;
-		this.y += (y - this.y) * tween;
+		this.x += (x - this.x);
+		this.y += (y - this.y);
 		fixBounds();
 
 		colOffset = (int) -this.x / tileSize;
@@ -255,13 +222,13 @@ public class TileMap
 	// Read the sprite sheet and go tile by tile drawing them from the array
 	public void draw(Graphics2D g)
 	{
-		for (int row = rowOffset; row < rowOffset + numRowsToDraw; row++)
+		for (int row = rowOffset; row < rowOffset + numRowsToDraw; ++row)
 		{
 			// Stop drawing if you're at the end
 			if (row >= numRows)
 				break;
 
-			for (int col = colOffset; col < colOffset + numColsToDraw; col++)
+			for (int col = colOffset; col < colOffset + numColsToDraw; ++col)
 			{
 				if (col >= numCols)
 					break;
@@ -280,63 +247,34 @@ public class TileMap
 		}
 		
 		// Draw UI The UI does not need any math when drawing to the screen, as it will be a static position.
+		playerUi.draw(g);	
 		
-		// Health Bar
-		g.drawImage(UiSprites[0], 0, 0, null);
-		g.drawImage(UiSprites[1], 1, 5, null);
-		
-		// Element Containers
-		g.drawImage(UiSprites[2], GamePanel.WIDTH - 26, 0, null);
-		g.drawImage(UiSprites[2], GamePanel.WIDTH - 26, 25, null);
-		
-		// Draw up and down elements if they are not NONE
-		if(currentElementUp.val != -1)
-			g.drawImage(UiElements[currentElementUp.val], GamePanel.WIDTH - 26 + 5, 5, null);
-		if(currentElementDown.val != -1)
-			g.drawImage(UiElements[currentElementDown.val], GamePanel.WIDTH - 26 + 5, 25 + 5, null);
-		
-	}
-	
-	public void setTween(int i)
-	{
-		tween = i;
-	}
-	
-	public double getTween()
-	{
-		return tween;
+		// Draws a placeholder item drop, use this.x and this.y to draw it with respect to the map. any extra added to x/y will move it around on the map
+		itemDropPlaceholder.draw(g, (int)this.x + 200, (int)this.y + 175);
 	}
 	
 	public void setPlayersHealth(double playersHealth)
 	{
-		if(playersHealth > 0)
-		{// Takes in the current amount of health the player has and draws that exact amount as a bar
-			UiSprites[1] = interimSheet.getSubimage(156, 10, (int)Math.round( 148 * (playersHealth/100)), 13);
-		}
-		else
-		{// If the hero has 0 health, draw the smallest amount of life possible. They have died.
-			UiSprites[1] = interimSheet.getSubimage(156, 10, 1, 13);
-		}
+		playerUi.setPlayersHealth(playersHealth);
 	}
 
 	public void setUpElement(Element element)
 	{
-		currentElementUp = element;
+		playerUi.setUpElement(element);
 	}
 	
 	public Element getUpElement()
 	{
-		return currentElementUp;
+		return playerUi.getUpElement();
 	}
 	
 	public void setDownElement(Element element)
 	{
-		currentElementDown = element;
+		playerUi.setDownElement(element);
 	}
 	
 	public Element getDownElement()
 	{
-		return currentElementDown;
+		return playerUi.getDownElement();
 	}
-	
 }

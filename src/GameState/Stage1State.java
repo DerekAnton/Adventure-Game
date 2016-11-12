@@ -28,7 +28,6 @@ public class Stage1State extends GameState
 		tileMap.loadTiles("/Tileset/maplesheet.png");
 		tileMap.loadMap("/MapFiles/level1-1.map");
 		tileMap.setPosition(0, 0);
-		tileMap.setTween(1);
 		background = new Background("/Backgrounds/grassbg1.gif", 0.1);
 
 		player = new Player(tileMap);
