@@ -248,9 +248,6 @@ public class TileMap
 		
 		// Draw UI The UI does not need any math when drawing to the screen, as it will be a static position.
 		playerUi.draw(g);	
-		
-		// Draws a placeholder item drop, use this.x and this.y to draw it with respect to the map. any extra added to x/y will move it around on the map
-		itemDropPlaceholder.draw(g, (int)this.x + 200, (int)this.y + 175);
 	}
 	
 	public void setPlayersHealth(double playersHealth)

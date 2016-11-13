@@ -3,6 +3,7 @@ package GameState;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 
+import Entity.ItemDrop;
 import Entity.Player;
 import Main.GamePanel;
 import TileMap.Background;
@@ -14,6 +15,8 @@ public class Stage1State extends GameState
 	private Background background;
 
 	private Player player;
+	
+	private ItemDrop itemDrops;
 
 	public Stage1State(GameStateManager gsmanager)
 	{
@@ -32,12 +35,15 @@ public class Stage1State extends GameState
 
 		player = new Player(tileMap);
 		player.setPosition(100, 100);
+		
+		itemDrops = new ItemDrop(tileMap);
 	}
 
 	@Override
 	public void update()
 	{
 		player.update();
+		itemDrops.update(player);
 		tileMap.setPosition(GamePanel.WIDTH / 2 - player.getx(), GamePanel.HEIGHT / 2 - player.gety());
 	}
 
@@ -48,8 +54,15 @@ public class Stage1State extends GameState
 		background.draw(g);
 		// Draw the tile map
 		tileMap.draw(g);
+		// Draw item drops
+		itemDrops.draw(g);
 		// Draw player
 		player.draw(g);
+		
+		// Draw item drops loop
+		//for(ItemDrop drop : itemDrops)
+			//drop.draw(g);
+
 	}
 
 	@SuppressWarnings("restriction")
