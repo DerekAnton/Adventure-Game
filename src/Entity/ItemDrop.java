@@ -38,9 +38,8 @@ public class ItemDrop extends MapObject
 	}
 	
 	public void update(MapObject player)
-	{
-		setMapPosition();
-		
+	{	
+		// Create hitbox rects. r1 is this' hitbox. 
 		Rectangle r1 = new Rectangle((int)x,(int)y,hitboxWidth, hitboxHeight);
 		Rectangle r2 = player.getRectangle();
 		
