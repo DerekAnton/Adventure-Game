@@ -8,6 +8,7 @@ import Entity.Player;
 import Main.GamePanel;
 import TileMap.Background;
 import TileMap.TileMap;
+import TileMap.TileMap.Element;
 
 public class Stage1State extends GameState
 {
@@ -16,7 +17,7 @@ public class Stage1State extends GameState
 
 	private Player player;
 	
-	private ItemDrop itemDrops;
+	private ItemDrop itemDrop;
 
 	public Stage1State(GameStateManager gsmanager)
 	{
@@ -36,15 +37,16 @@ public class Stage1State extends GameState
 		player = new Player(tileMap);
 		player.setPosition(100, 100);
 		
-		itemDrops = new ItemDrop(tileMap);
-		itemDrops.setPosition(220, 175);
+		itemDrop = new ItemDrop(tileMap);
+		itemDrop.setPosition(220, 175);
+		itemDrop.setElementType(Element.FIRE); // place holder element for testing purposes
 	}
 
 	@Override
 	public void update()
 	{
 		player.update();
-		itemDrops.update(player);
+		itemDrop.update(player);
 		tileMap.setPosition(GamePanel.WIDTH / 2 - player.getx(), GamePanel.HEIGHT / 2 - player.gety());
 	}
 
@@ -56,7 +58,7 @@ public class Stage1State extends GameState
 		// Draw the tile map
 		tileMap.draw(g);
 		// Draw item drops
-		itemDrops.draw(g);
+		itemDrop.draw(g);
 		// Draw player
 		player.draw(g);
 		
@@ -75,9 +77,9 @@ public class Stage1State extends GameState
 		if (k == KeyEvent.VK_RIGHT)
 			player.setIsMovingRight(true);
 		if (k == KeyEvent.VK_UP)
-			player.setUpElement();
+			player.setUpElement(itemDrop);
 		if (k == KeyEvent.VK_DOWN)
-			player.setDownElement();
+			player.setDownElement(itemDrop);
 		if (k == KeyEvent.VK_SHIFT)
 			player.setIsJumping(true);
 		if (k == KeyEvent.VK_Z)

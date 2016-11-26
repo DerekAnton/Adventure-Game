@@ -376,46 +376,48 @@ public class Player extends MapObject
 			animation.setDelay(400);
 	}
 	
-	public void setUpElement()
+	public void setUpElement(ItemDrop itemdrop)
 	{
-		TileMap.Element currElement = tileMap.getUpElement();
-		
-		switch (currElement)
+		if(itemdrop.canPlayerPickUpItem())
 		{
-			case NONE:
-				tileMap.setUpElement(TileMap.Element.FIRE);
-				break;
-			case FIRE:
-				tileMap.setUpElement(TileMap.Element.EARTH);
-				break;
-			case EARTH:
-				tileMap.setUpElement(TileMap.Element.WIND);
-				break;
-			case WIND:
-				tileMap.setUpElement(TileMap.Element.NONE);
-				break;
-		}	
+  		switch (itemdrop.getElementType())
+  		{
+  			case FIRE:
+  				tileMap.setUpElement(TileMap.Element.FIRE);
+  				break;
+  			case EARTH:
+  				tileMap.setUpElement(TileMap.Element.EARTH);
+  				break;
+  			case WIND:
+  				tileMap.setUpElement(TileMap.Element.WIND);
+  				break;
+  			case NONE:
+  				tileMap.setUpElement(TileMap.Element.NONE);
+  				break;
+  		}	
+		}
 	}
 	
-	public void setDownElement()
+	public void setDownElement(ItemDrop itemdrop)
 	{
-		TileMap.Element currElement = tileMap.getDownElement();
-		
-		switch (currElement)
+		if(itemdrop.canPlayerPickUpItem())
 		{
-			case NONE:
-				tileMap.setDownElement(TileMap.Element.FIRE);
-				break;
-			case FIRE:
-				tileMap.setDownElement(TileMap.Element.EARTH);
-				break;
-			case EARTH:
-				tileMap.setDownElement(TileMap.Element.WIND);
-				break;
-			case WIND:
-				tileMap.setDownElement(TileMap.Element.NONE);
-				break;
-		}	
+  		switch (itemdrop.getElementType())
+  		{
+  			case FIRE:
+  				tileMap.setDownElement(TileMap.Element.FIRE);
+  				break;
+  			case EARTH:
+  				tileMap.setDownElement(TileMap.Element.EARTH);
+  				break;
+  			case WIND:
+  				tileMap.setDownElement(TileMap.Element.WIND);
+  				break;
+  			case NONE:
+  				tileMap.setDownElement(TileMap.Element.NONE);
+  				break;
+  		}	
+		}
 	}
 	
 }

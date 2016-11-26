@@ -14,6 +14,7 @@ public class ItemDrop extends MapObject
 {
 	private BufferedImage image;
 	private Element elementType;
+	private boolean playerCanPickUp;
 	
 	public ItemDrop(TileMap tm)
 	{
@@ -25,6 +26,8 @@ public class ItemDrop extends MapObject
 		// Set the default hitbox for our item drop
 		hitboxWidth = 18;
 		hitboxHeight = 24;
+		
+		playerCanPickUp = false;
 		
 		try 
 		{
@@ -43,8 +46,8 @@ public class ItemDrop extends MapObject
 		Rectangle r1 = new Rectangle((int)x,(int)y,hitboxWidth, hitboxHeight);
 		Rectangle r2 = player.getRectangle();
 		
-		if(r1.intersects(r2))
-			System.out.println("hit");
+		// if the player is colliding with the item, allow him to pick it up.
+		playerCanPickUp = (r1.intersects(r2)) ? true : false;
 	}
 	
 	public void draw(Graphics2D g)
@@ -59,6 +62,11 @@ public class ItemDrop extends MapObject
 	public void setElementType(TileMap.Element ele)
 	{
 		elementType = ele;
+	}
+	
+	public boolean canPlayerPickUpItem()
+	{
+		return playerCanPickUp;
 	}
 	
 	public TileMap.Element getElementType()
