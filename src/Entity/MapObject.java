@@ -278,6 +278,16 @@ public abstract class MapObject
 	{
 		isJumping = b;
 	}
+	
+	public double getXMap()
+	{
+		return xmap;
+	}
+	
+	public double getYMap()
+	{
+		return ymap;
+	}
 
 	// Returns whether or not this map object is on the screen
 	public boolean notOnScreen()

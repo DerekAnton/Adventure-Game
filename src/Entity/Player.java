@@ -176,6 +176,7 @@ public class Player extends MapObject
 			--jumpsRemaining;
 			isJumping = false;
 		}
+		
 		// Falling Logic
 		else if (isFalling)
 		{ // Decrement by fall speed
@@ -187,7 +188,7 @@ public class Player extends MapObject
 				return;
 			}
 
-			// gravity applied
+			// Gravity applied
 			dy += gravityFallSpeed;
 
 			if (dy > 0)

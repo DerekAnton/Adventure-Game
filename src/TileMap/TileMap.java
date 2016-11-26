@@ -57,9 +57,7 @@ public class TileMap
 	private int numColsToDraw;
 		
 	private PlayerUI playerUi;
-	
-	private ItemDrop itemDropPlaceholder;
-	
+		
 
 	public TileMap(int tileSize)
 	{
@@ -69,9 +67,6 @@ public class TileMap
 		
 		// Load the UI
 		playerUi = new PlayerUI();
-		
-		// Item Drop Placeholder
-		itemDropPlaceholder = new ItemDrop(this);// maybe change where item drops are saved? awkward being here passing this.
 	}
 
 	// Read tile images from path

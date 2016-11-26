@@ -1,6 +1,7 @@
 package Entity;
 
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -22,11 +23,12 @@ public class ItemDrop extends MapObject
 		elementType = Element.NONE;
 		
 		// Set the default hitbox for our item drop
-		hitboxWidth = 38;
+		hitboxWidth = 18;
 		hitboxHeight = 24;
 		
 		try 
 		{
+			// right now a placeholder image is used, will need a generic background, and then load the element top on top of it
 			image = ImageIO.read(getClass().getResourceAsStream("/MCs/FireBallContainer.png"));
 		} 
 		catch (IOException e) 
@@ -37,7 +39,12 @@ public class ItemDrop extends MapObject
 	
 	public void update(MapObject player)
 	{
-		if(intersects(player))
+		setMapPosition();
+		
+		Rectangle r1 = new Rectangle((int)x,(int)y,hitboxWidth, hitboxHeight);
+		Rectangle r2 = player.getRectangle();
+		
+		if(r1.intersects(r2))
 			System.out.println("hit");
 	}
 	
@@ -45,13 +52,9 @@ public class ItemDrop extends MapObject
 	{
 		// this is important because it updates our xmap and ymap values so we can draw relative to the level.
 		setMapPosition();
-		
-		// this is incorrect as of now, need to figure out what values to update my x & y with relative to the PLAYER.
-		x = xmap;
-		y = ymap;
-		
+				
 		// Draw item drop relative to the map
-		g.drawImage(image, (int)xmap + 220, (int)ymap + 175, null);
+		g.drawImage(image, (int)(xmap + x), (int)(ymap + y), null);
 	}
 	
 	public void setElementType(TileMap.Element ele)

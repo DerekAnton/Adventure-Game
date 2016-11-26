@@ -37,6 +37,7 @@ public class Stage1State extends GameState
 		player.setPosition(100, 100);
 		
 		itemDrops = new ItemDrop(tileMap);
+		itemDrops.setPosition(220, 175);
 	}
 
 	@Override
