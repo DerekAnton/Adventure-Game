@@ -2,6 +2,8 @@ package GameState;
 
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 import Entity.ItemDrop;
 import Entity.Player;
@@ -17,7 +19,8 @@ public class Stage1State extends GameState
 
 	private Player player;
 	
-	private ItemDrop itemDrop;
+	// List of item drops on the map
+	private List<ItemDrop> itemDrops;
 
 	public Stage1State(GameStateManager gsmanager)
 	{
@@ -36,17 +39,22 @@ public class Stage1State extends GameState
 
 		player = new Player(tileMap);
 		player.setPosition(100, 100);
+		itemDrops = new ArrayList<ItemDrop>();
 		
-		itemDrop = new ItemDrop(tileMap);
-		itemDrop.setPosition(220, 175);
-		itemDrop.setElementType(Element.FIRE); // place holder element for testing purposes
+		itemDrops.add(new ItemDrop(tileMap));
+		itemDrops.get(0).setPosition(220, 175);
+		itemDrops.get(0).setElementType(Element.FIRE); // place holder element for testing purposes
 	}
 
 	@Override
 	public void update()
 	{
 		player.update();
-		itemDrop.update(player);
+		
+		// For each item drop on the map
+		for(ItemDrop itemDrop : itemDrops)
+			itemDrop.update(player);
+		
 		tileMap.setPosition(GamePanel.WIDTH / 2 - player.getx(), GamePanel.HEIGHT / 2 - player.gety());
 	}
 
@@ -58,7 +66,8 @@ public class Stage1State extends GameState
 		// Draw the tile map
 		tileMap.draw(g);
 		// Draw item drops
-		itemDrop.draw(g);
+		for(ItemDrop itemDrop : itemDrops)
+			itemDrop.draw(g);
 		// Draw player
 		player.draw(g);
 		
@@ -77,9 +86,9 @@ public class Stage1State extends GameState
 		if (k == KeyEvent.VK_RIGHT)
 			player.setIsMovingRight(true);
 		if (k == KeyEvent.VK_UP)
-			player.setUpElement(itemDrop);
+			player.setUpElement(itemDrops);
 		if (k == KeyEvent.VK_DOWN)
-			player.setDownElement(itemDrop);
+			player.setDownElement(itemDrops);
 		if (k == KeyEvent.VK_SHIFT)
 			player.setIsJumping(true);
 		if (k == KeyEvent.VK_Z)

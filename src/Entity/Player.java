@@ -4,6 +4,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 
@@ -376,48 +377,56 @@ public class Player extends MapObject
 			animation.setDelay(400);
 	}
 	
-	public void setUpElement(ItemDrop itemdrop)
+	public void setUpElement(List<ItemDrop> itemDrops)
 	{
-		if(itemdrop.canPlayerPickUpItem())
+		// for each itemdrop
+		for(ItemDrop itemDrop : itemDrops)
 		{
-  		switch (itemdrop.getElementType())
+  		if(itemDrop.canPlayerPickUpItem())
   		{
-  			case FIRE:
-  				tileMap.setUpElement(TileMap.Element.FIRE);
-  				break;
-  			case EARTH:
-  				tileMap.setUpElement(TileMap.Element.EARTH);
-  				break;
-  			case WIND:
-  				tileMap.setUpElement(TileMap.Element.WIND);
-  				break;
-  			case NONE:
-  				tileMap.setUpElement(TileMap.Element.NONE);
-  				break;
-  		}	
+    		switch (itemDrop.getElementType())
+    		{
+    			case FIRE:
+    				tileMap.setUpElement(TileMap.Element.FIRE);
+    				break;
+    			case EARTH:
+    				tileMap.setUpElement(TileMap.Element.EARTH);
+    				break;
+    			case WIND:
+    				tileMap.setUpElement(TileMap.Element.WIND);
+    				break;
+    			case NONE:
+    				tileMap.setUpElement(TileMap.Element.NONE);
+    				break;
+    		}	
+  		}
 		}
 	}
 	
-	public void setDownElement(ItemDrop itemdrop)
+	public void setDownElement(List<ItemDrop> itemDrops)
 	{
-		if(itemdrop.canPlayerPickUpItem())
+		// for each itemdrop
+		for(ItemDrop itemDrop : itemDrops)
 		{
-  		switch (itemdrop.getElementType())
+  		if(itemDrop.canPlayerPickUpItem())
   		{
-  			case FIRE:
-  				tileMap.setDownElement(TileMap.Element.FIRE);
-  				break;
-  			case EARTH:
-  				tileMap.setDownElement(TileMap.Element.EARTH);
-  				break;
-  			case WIND:
-  				tileMap.setDownElement(TileMap.Element.WIND);
-  				break;
-  			case NONE:
-  				tileMap.setDownElement(TileMap.Element.NONE);
-  				break;
-  		}	
-		}
+    		switch (itemDrop.getElementType())
+    		{
+    			case FIRE:
+    				tileMap.setDownElement(TileMap.Element.FIRE);
+    				break;
+    			case EARTH:
+    				tileMap.setDownElement(TileMap.Element.EARTH);
+    				break;
+    			case WIND:
+    				tileMap.setDownElement(TileMap.Element.WIND);
+    				break;
+    			case NONE:
+    				tileMap.setDownElement(TileMap.Element.NONE);
+    				break;
+    		}	
+  		}
+  	}
 	}
 	
 }
