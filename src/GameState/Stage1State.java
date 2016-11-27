@@ -7,6 +7,8 @@ import java.util.List;
 
 import Entity.ItemDrop;
 import Entity.Player;
+import Entity.Spell;
+import Entity.Spell.SpellType;
 import Main.GamePanel;
 import TileMap.Background;
 import TileMap.TileMap;
@@ -21,6 +23,7 @@ public class Stage1State extends GameState
 	
 	// List of item drops on the map
 	private List<ItemDrop> itemDrops;
+	private List<Spell> spells;
 
 	public Stage1State(GameStateManager gsmanager)
 	{
@@ -41,9 +44,15 @@ public class Stage1State extends GameState
 		player.setPosition(100, 100);
 		itemDrops = new ArrayList<ItemDrop>();
 		
+		// place holder element for testing purposes
 		itemDrops.add(new ItemDrop(tileMap));
 		itemDrops.get(0).setPosition(220, 175);
-		itemDrops.get(0).setElementType(Element.FIRE); // place holder element for testing purposes
+		itemDrops.get(0).setElementType(Element.FIRE);
+		
+		// placeholder firebolt spell
+		spells = new ArrayList<Spell>();
+		spells.add(new Spell(tileMap, SpellType.FIREBOLT));
+		
 	}
 
 	@Override
@@ -54,6 +63,9 @@ public class Stage1State extends GameState
 		// For each item drop on the map
 		for(ItemDrop itemDrop : itemDrops)
 			itemDrop.update(player);
+		// For each spell on the map
+		for(Spell spell : spells)
+			spell.update();
 		
 		tileMap.setPosition(GamePanel.WIDTH / 2 - player.getx(), GamePanel.HEIGHT / 2 - player.gety());
 	}
@@ -68,11 +80,13 @@ public class Stage1State extends GameState
 		// Draw item drops
 		for(ItemDrop itemDrop : itemDrops)
 			itemDrop.draw(g);
+		// Draw spells
+		for(Spell spell : spells)
+			spell.draw(g);
 		// Draw player
 		player.draw(g);
 	}
 
-	@SuppressWarnings("restriction")
 	@Override
 	public void keyPressed(int k)
 	{
@@ -91,7 +105,6 @@ public class Stage1State extends GameState
 
 	}
 
-	@SuppressWarnings("restriction")
 	@Override
 	public void keyReleased(int k)
 	{

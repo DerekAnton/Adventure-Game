@@ -89,7 +89,6 @@ public class MenuState extends GameState
 			System.exit(0);
 	}
 
-	@SuppressWarnings("restriction")
 	@Override
 	public void keyPressed(int k)
 	{

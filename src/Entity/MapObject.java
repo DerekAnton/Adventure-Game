@@ -147,7 +147,8 @@ public abstract class MapObject
 				// Undo the move and set our y velocity to 0
 				dy = 0;
 				ytemp = currRow * tileSize + hitboxHeight / 2;
-			} else
+			} 
+			else
 			{
 				// Keep going up
 				ytemp += dy;
@@ -163,7 +164,8 @@ public abstract class MapObject
 				dy = 0;
 				isFalling = false;
 				ytemp = (currRow + 1) * tileSize - hitboxHeight / 2;
-			} else
+			} 
+			else
 			{
 				// Keep going down
 				ytemp += dy;
@@ -185,7 +187,8 @@ public abstract class MapObject
 				// undo the last move and set our x velocity to 0
 				dx = 0;
 				xtemp = currCol * tileSize + hitboxWidth / 2;
-			} else
+			} 
+			else
 			{
 				xtemp += dx;
 			}
@@ -196,7 +199,8 @@ public abstract class MapObject
 			{
 				dx = 0;
 				xtemp = (currCol + 1) * tileSize - hitboxWidth / 2;
-			} else
+			} 
+			else
 			{
 				xtemp += dx;
 			}

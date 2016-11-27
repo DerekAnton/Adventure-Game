@@ -6,6 +6,8 @@ public class Animation
 {
 	private BufferedImage[] frames;
 	private int currentFrame;
+	
+	private int totalFrames;
 
 	private long startTime;
 	private long delay;
@@ -71,6 +73,16 @@ public class Animation
 	public boolean hasPlayedOnce()
 	{
 		return hasPlayedOnce;
+	}
+	
+	public void setTotalFrames(int newframes)
+	{
+		totalFrames = newframes;
+	}
+	
+	public int getTotalFrames()
+	{
+		return totalFrames;
 	}
 
 }

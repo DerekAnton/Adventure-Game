@@ -403,7 +403,7 @@ public class Player extends MapObject
     				tileMap.setUpElement(TileMap.Element.NONE);
     				break;
     		}	
-    		iter.remove();
+    		iter.remove(); // since we've successfully picked up the item, remove the object.
   		}
 		}
 	}
@@ -433,7 +433,7 @@ public class Player extends MapObject
     				tileMap.setDownElement(TileMap.Element.NONE);
     				break;
     		}	
-    		iter.remove();
+    		iter.remove(); // since we've successfully picked up the item, remove the object.
   		}
 		}
 	}
