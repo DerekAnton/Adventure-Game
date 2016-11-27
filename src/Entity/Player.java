@@ -4,6 +4,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.imageio.ImageIO;
@@ -379,12 +380,15 @@ public class Player extends MapObject
 	
 	public void setUpElement(List<ItemDrop> itemDrops)
 	{
-		// for each itemdrop
-		for(ItemDrop itemDrop : itemDrops)
+		Iterator<ItemDrop> iter = itemDrops.iterator();
+		// for each ItemDrop
+		while(iter.hasNext())
 		{
-  		if(itemDrop.canPlayerPickUpItem())
+			ItemDrop itemdrop = iter.next(); // increment the iterator, then store the target object
+			
+  		if(itemdrop.canPlayerPickUpItem())
   		{
-    		switch (itemDrop.getElementType())
+    		switch (itemdrop.getElementType())
     		{
     			case FIRE:
     				tileMap.setUpElement(TileMap.Element.FIRE);
@@ -399,18 +403,22 @@ public class Player extends MapObject
     				tileMap.setUpElement(TileMap.Element.NONE);
     				break;
     		}	
+    		iter.remove();
   		}
 		}
 	}
 	
 	public void setDownElement(List<ItemDrop> itemDrops)
 	{
-		// for each itemdrop
-		for(ItemDrop itemDrop : itemDrops)
+		Iterator<ItemDrop> iter = itemDrops.iterator();
+		// for each ItemDrop
+		while(iter.hasNext())
 		{
-  		if(itemDrop.canPlayerPickUpItem())
+			ItemDrop itemdrop = iter.next(); // increment the iterator, then store the target object
+			
+  		if(itemdrop.canPlayerPickUpItem())
   		{
-    		switch (itemDrop.getElementType())
+    		switch (itemdrop.getElementType())
     		{
     			case FIRE:
     				tileMap.setDownElement(TileMap.Element.FIRE);
@@ -425,8 +433,9 @@ public class Player extends MapObject
     				tileMap.setDownElement(TileMap.Element.NONE);
     				break;
     		}	
+    		iter.remove();
   		}
-  	}
+		}
 	}
 	
 }

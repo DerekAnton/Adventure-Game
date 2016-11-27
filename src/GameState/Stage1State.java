@@ -70,11 +70,6 @@ public class Stage1State extends GameState
 			itemDrop.draw(g);
 		// Draw player
 		player.draw(g);
-		
-		// Draw item drops loop
-		//for(ItemDrop drop : itemDrops)
-			//drop.draw(g);
-
 	}
 
 	@SuppressWarnings("restriction")
